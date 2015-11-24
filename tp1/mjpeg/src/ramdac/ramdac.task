@@ -1,0 +1,11 @@
+# -*- python -*-
+
+TaskModel(
+	'ramdac',
+	ports = {'input':MwmrInput(48*8)},
+	impls = [ SwTask( 'ramdac',
+					 bootstrap = 'bootstrap',
+					 stack_size = 1024,
+					 sources = [ 'ramdac.c', 'ramdac_x11.c' ],
+					 defines = [ 'WIDTH', 'HEIGHT' ] ),
+			 ] )

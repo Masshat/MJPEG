@@ -1,0 +1,10 @@
+log.o: /users/outil/dsx/head/dsx/lib/backends/posix/src/log.c \
+ /users/outil/dsx/head/dsx/lib/backends/common/include/srl.h \
+ /users/outil/dsx/head/dsx/lib/backends/common/include/srl_public_types.h \
+ /users/outil/dsx/head/dsx/lib/backends/common/include/srl_lock.h \
+ /users/outil/dsx/head/dsx/lib/backends/common/include/srl_mwmr.h \
+ /users/outil/dsx/head/dsx/lib/backends/common/include/srl_log.h \
+ /users/outil/dsx/head/dsx/lib/backends/common/include/srl_barrier.h \
+ /users/outil/dsx/head/dsx/lib/backends/common/include/srl_memspace.h \
+ /users/outil/dsx/head/dsx/lib/backends/common/include/srl_system_functions.h \
+ /users/outil/dsx/head/dsx/lib/backends/posix/include/srl_hw_helpers.h

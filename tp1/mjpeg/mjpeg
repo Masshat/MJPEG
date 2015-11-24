@@ -1,0 +1,38 @@
+#!/usr/bin/env python
+
+from dsx import *
+
+# Declaration of all MWMR fifos
+tg_demux    = Mwmr('tg_demux'   , 32, 2)
+demux_vld   = Mwmr('demux_vld'  , 32, 2)
+vld_iqzz    = Mwmr('vld_iqzz'   , 128, 2)
+iqzz_idct   = Mwmr('iqzz_idct'  , 256, 2)
+idct_libu   = Mwmr('idct_libu'  , 64, 2)
+libu_ramdac = Mwmr('libu_ramdac', 48*8, 2)
+huffman     = Mwmr('huffman'    , 32, 2)
+quanti      = Mwmr('quanti'     , 64, 2)
+
+tcg = Tcg(
+    Task( 'tg', "tg",
+          {'output':tg_demux },
+          defines = {'FILE_NAME':'"plan.mjpg"'}),
+    Task( 'demux', "demux",
+          { 'input':tg_demux,
+            'output':demux_vld,
+            'huffman':huffman,
+            'quanti':quanti },
+            defines = {'WIDTH':"48",
+                       'HEIGHT':"48"}),
+    Task( 'vld', ... )
+
+    ...
+
+    Task( 'ramdac', "ramdac",
+          { 'input': libu_ramdac },
+            defines = {'WIDTH':"48",
+                       'HEIGHT':"48"}),
+    )
+
+p = Posix()
+tcg.generate(p)
+

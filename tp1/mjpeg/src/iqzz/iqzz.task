@@ -1,0 +1,13 @@
+# -*- python -*-
+
+TaskModel(
+	'iqzz',
+	ports = {'input':MwmrInput(128),
+			 'output':MwmrOutput(256),
+			 'quanti':MwmrInput(64),
+			 },
+	impls = [ SwTask( 'iqzz',
+					 stack_size = 1024,
+					 sources = [ 'iqzz.bc' ],
+					 defines = [ 'WIDTH', 'HEIGHT' ] )
+			 ] )

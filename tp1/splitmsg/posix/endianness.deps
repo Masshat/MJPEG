@@ -1,0 +1,2 @@
+endianness.o: \
+ /users/outil/dsx/head/dsx/lib/backends/posix/src/endianness.c
