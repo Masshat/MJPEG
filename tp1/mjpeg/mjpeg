@@ -16,6 +16,7 @@ tcg = Tcg(
     Task( 'tg', "tg",
           {'output':tg_demux },
           defines = {'FILE_NAME':'"plan.mjpg"'}),
+
     Task( 'demux', "demux",
           { 'input':tg_demux,
             'output':demux_vld,
@@ -23,9 +24,32 @@ tcg = Tcg(
             'quanti':quanti },
             defines = {'WIDTH':"48",
                        'HEIGHT':"48"}),
-    Task( 'vld', ... )
 
-    ...
+    Task( 'vld', "vld",
+	  {'input':demux_vld,
+	   'output':vld_iqzz,
+	   'huffman':huffman },
+            defines = {'WIDTH':"48",
+                       'HEIGHT':"48"}),
+    
+    Task( 'iqzz', "iqzz",
+	  {'input':vld_iqzz,
+	   'output':iqzz_idct,
+	   'quanti':quanti },
+            defines = {'WIDTH':"48",
+                       'HEIGHT':"48"}),
+
+    Task( 'idct', "idct",
+	  {'input':iqzz_idct,
+	   'output':idct_libu},
+            defines = {'WIDTH':"48",
+                       'HEIGHT':"48"}),
+
+    Task( 'libu', "libu",
+	  {'input':idct_libu,
+	   'output':libu_ramdac},
+            defines = {'WIDTH':"48",
+                       'HEIGHT':"48"}),
 
     Task( 'ramdac', "ramdac",
           { 'input': libu_ramdac },
@@ -35,4 +59,3 @@ tcg = Tcg(
 
 p = Posix()
 tcg.generate(p)
-
