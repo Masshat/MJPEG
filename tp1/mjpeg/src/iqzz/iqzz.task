@@ -8,6 +8,6 @@ TaskModel(
 			 },
 	impls = [ SwTask( 'iqzz',
 					 stack_size = 1024,
-					 sources = [ 'iqzz.bc' ],
+					 sources = [ 'iqzz.c' ],
 					 defines = [ 'WIDTH', 'HEIGHT' ] )
 			 ] )
