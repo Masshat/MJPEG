@@ -26,7 +26,7 @@
       \begin{flushleft} \large
         \emph{Auteurs:}\\
         BITAM \textsc{Massine}\\
-        TOUTMLILT \textsc{Ilyas}
+        TOUMLILT \textsc{Ilyas}
       \end{flushleft}
     \end{minipage}%
     \begin{minipage}[t]{0.47\textwidth}
@@ -43,35 +43,44 @@
 
 \section*{Question 1}
 
+\textbf{->}Fichiers présents avant la commande :\\
 \$ ls *
 
 splitmsg.py
 
-src:
-consumer.c  consumer.task  producer.c  producer.task
+src:\\
+consumer.c  consumer.task  producer.c  producer.task\\
 
+\textbf{->}Fichiers crées après la commande :\\
 \$ ls *
 
-exe.posix
+exe.posix\\
 
-posix:
-barrier.deps      desc.o            lock.deps  mwmr.deps
-barrier.o         dsx\_hw\_init.c     lock.o     mwmr.o
-consumer.deps     dsx\_hw\_init.deps  log.deps   producer.deps
-consumer.o        dsx\_hw\_init.o     log.o      producer.o
-consumer\_proto.h  endianness.deps   main.deps  producer\_proto.h
-desc.c            endianness.o      main.o
-desc.deps         exe.posix         Makefile
+posix:\\
+barrier.deps      desc.o            lock.deps  mwmr.deps\\
+barrier.o         dsx\_hw\_init.c     lock.o     mwmr.o\\
+consumer.deps     dsx\_hw\_init.deps  log.deps   producer.deps\\
+consumer.o        dsx\_hw\_init.o     log.o      producer.o\\
+consumer\_proto.h  endianness.deps   main.deps  producer\_proto.h\\
+desc.c            endianness.o      main.o\\
+desc.deps         exe.posix         Makefile\\
 
 \section*{Question 2}
-Producteur produit ...World et affiche Hello..., le consommateur cosomme le ...World et l'affiche.
+Producteur produit ``...World'' et affiche ``Hello...'', le consommateur cosomme le ``...World'' et l'affiche.
 
 \section*{Question 3}
-Une première partie, où l'on défini les tâches de notre application et les interconnexions entre elles(Les fifo de communication), C'est la construction du TCG. Et une seconde partie dans laquelle, on génère le code pour l'éxecution sur la plateforme matérielle souhaitée.
+Dans la première partie, on définit les tâches de notre application et les interconnexions entre elles (Les fifo de communication), c'est la construction du TCG. Et dans la seconde partie, on génère le code pour l'exécution sur la plateforme matérielle souhaitée.
+
 \section*{Question 4}
+Ce qui n'est pas présent dans la description DSX/L, et qui est indispensable 
+à la construction et à l'exécution de l'application, c'est la description
+des tâches.
 
 \section*{Question 5}
-nous observons une image qui fait des rotation, la vitesse est trop rapide, mais nous avons vu que le fichier plan est l'image d'un avion,
-vu que la vitesse est trop rapide il apparait que le sens de rotation change de temps en temps.
+Nous observons que l'image source ( plan avion ) fait des rotations, la 
+rapidité de la rotation laisse croire que c'est une croix.
+On remarque également que la vitesse de rotation est variable, en effet ceci 
+est certainement du au fait que certaines tâches prennent plus de temps de 
+traitement que d'autres.
 
 \end{document}
