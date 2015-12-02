@@ -171,8 +171,8 @@ mapper.map(tcg,
 
 # Embedded software linked with the Mutek/S OS
 
-#mapper.generate( MutekS() )
-mapper.generate( MutekH() )
+mapper.generate( MutekS() )
+#mapper.generate( MutekH() )
 
 # The software application for a POSX workstation can still be generated
 

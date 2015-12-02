@@ -1,0 +1,146 @@
+  - Building VciXcacheWrapper cpu0
+  - Building VciMultiTTy tty0
+    => segment tty0_seg / base = 90400000 / size = 20
+  - Building VciVgmn : vgmn0
+    => targets        = 5
+    => initiators     = 3
+    => default target = 0
+Loading at 0x10000000 size 0x100000: .cram0 
+Loading at 0x10400000 size 0x100000: nothing
+Loading at 0x20000000 size 0x100000: .cram1 .text .rodata .contextdata 
+Loading at 0x20400000 size 0x100000: .uram1 .data 
+Loading at 0xbfc00000 size 0x1000: .boot 
+Loading at 0x80000080 size 0x1000: .excep 
+500000 cycles in 764 ms: 654450 Hz
+500000 cycles in 781 ms: 640205 Hz
+500000 cycles in 780 ms: 641026 Hz
+500000 cycles in 779 ms: 641849 Hz
+500000 cycles in 785 ms: 636943 Hz
+500000 cycles in 780 ms: 641026 Hz
+500000 cycles in 779 ms: 641849 Hz
+500000 cycles in 783 ms: 638570 Hz
+500000 cycles in 751 ms: 665779 Hz
+500000 cycles in 640 ms: 781250 Hz
+500000 cycles in 586 ms: 853242 Hz
+500000 cycles in 584 ms: 856164 Hz
+500000 cycles in 585 ms: 854701 Hz
+500000 cycles in 583 ms: 857633 Hz
+500000 cycles in 584 ms: 856164 Hz
+500000 cycles in 706 ms: 708215 Hz
+500000 cycles in 779 ms: 641849 Hz
+500000 cycles in 782 ms: 639386 Hz
+500000 cycles in 779 ms: 641849 Hz
+500000 cycles in 741 ms: 674764 Hz
+500000 cycles in 785 ms: 636943 Hz
+500000 cycles in 780 ms: 641026 Hz
+500000 cycles in 731 ms: 683995 Hz
+500000 cycles in 587 ms: 851789 Hz
+500000 cycles in 586 ms: 853242 Hz
+500000 cycles in 587 ms: 851789 Hz
+500000 cycles in 767 ms: 651890 Hz
+500000 cycles in 783 ms: 638570 Hz
+500000 cycles in 599 ms: 834725 Hz
+500000 cycles in 700 ms: 714286 Hz
+500000 cycles in 746 ms: 670241 Hz
+500000 cycles in 589 ms: 848896 Hz
+500000 cycles in 586 ms: 853242 Hz
+500000 cycles in 586 ms: 853242 Hz
+500000 cycles in 588 ms: 850340 Hz
+500000 cycles in 587 ms: 851789 Hz
+500000 cycles in 587 ms: 851789 Hz
+500000 cycles in 584 ms: 856164 Hz
+500000 cycles in 586 ms: 853242 Hz
+500000 cycles in 587 ms: 851789 Hz
+500000 cycles in 589 ms: 848896 Hz
+500000 cycles in 586 ms: 853242 Hz
+500000 cycles in 586 ms: 853242 Hz
+500000 cycles in 583 ms: 857633 Hz
+500000 cycles in 588 ms: 850340 Hz
+500000 cycles in 593 ms: 843170 Hz
+500000 cycles in 783 ms: 638570 Hz
+500000 cycles in 782 ms: 639386 Hz
+500000 cycles in 784 ms: 637755 Hz
+500000 cycles in 780 ms: 641026 Hz
+500000 cycles in 748 ms: 668449 Hz
+500000 cycles in 679 ms: 736377 Hz
+500000 cycles in 779 ms: 641849 Hz
+500000 cycles in 776 ms: 644330 Hz
+500000 cycles in 781 ms: 640205 Hz
+500000 cycles in 781 ms: 640205 Hz
+500000 cycles in 644 ms: 776398 Hz
+500000 cycles in 587 ms: 851789 Hz
+500000 cycles in 584 ms: 856164 Hz
+500000 cycles in 585 ms: 854701 Hz
+500000 cycles in 588 ms: 850340 Hz
+500000 cycles in 589 ms: 848896 Hz
+500000 cycles in 589 ms: 848896 Hz
+500000 cycles in 585 ms: 854701 Hz
+500000 cycles in 677 ms: 738552 Hz
+500000 cycles in 740 ms: 675676 Hz
+500000 cycles in 662 ms: 755287 Hz
+500000 cycles in 595 ms: 840336 Hz
+500000 cycles in 583 ms: 857633 Hz
+500000 cycles in 586 ms: 853242 Hz
+500000 cycles in 588 ms: 850340 Hz
+500000 cycles in 587 ms: 851789 Hz
+500000 cycles in 584 ms: 856164 Hz
+500000 cycles in 584 ms: 856164 Hz
+500000 cycles in 586 ms: 853242 Hz
+500000 cycles in 587 ms: 851789 Hz
+500000 cycles in 749 ms: 667557 Hz
+500000 cycles in 774 ms: 645995 Hz
+500000 cycles in 781 ms: 640205 Hz
+500000 cycles in 780 ms: 641026 Hz
+500000 cycles in 783 ms: 638570 Hz
+500000 cycles in 788 ms: 634518 Hz
+500000 cycles in 784 ms: 637755 Hz
+500000 cycles in 727 ms: 687758 Hz
+500000 cycles in 585 ms: 854701 Hz
+500000 cycles in 585 ms: 854701 Hz
+500000 cycles in 584 ms: 856164 Hz
+500000 cycles in 617 ms: 810373 Hz
+500000 cycles in 691 ms: 723589 Hz
+500000 cycles in 585 ms: 854701 Hz
+500000 cycles in 585 ms: 854701 Hz
+500000 cycles in 584 ms: 856164 Hz
+500000 cycles in 592 ms: 844595 Hz
+500000 cycles in 585 ms: 854701 Hz
+500000 cycles in 587 ms: 851789 Hz
+500000 cycles in 588 ms: 850340 Hz
+500000 cycles in 590 ms: 847458 Hz
+500000 cycles in 588 ms: 850340 Hz
+500000 cycles in 584 ms: 856164 Hz
+500000 cycles in 586 ms: 853242 Hz
+500000 cycles in 585 ms: 854701 Hz
+500000 cycles in 590 ms: 847458 Hz
+500000 cycles in 588 ms: 850340 Hz
+500000 cycles in 587 ms: 851789 Hz
+500000 cycles in 637 ms: 784929 Hz
+500000 cycles in 584 ms: 856164 Hz
+500000 cycles in 587 ms: 851789 Hz
+500000 cycles in 621 ms: 805153 Hz
+500000 cycles in 780 ms: 641026 Hz
+500000 cycles in 782 ms: 639386 Hz
+500000 cycles in 781 ms: 640205 Hz
+500000 cycles in 583 ms: 857633 Hz
+500000 cycles in 586 ms: 853242 Hz
+500000 cycles in 588 ms: 850340 Hz
+500000 cycles in 625 ms: 800000 Hz
+500000 cycles in 586 ms: 853242 Hz
+500000 cycles in 584 ms: 856164 Hz
+500000 cycles in 584 ms: 856164 Hz
+500000 cycles in 681 ms: 734214 Hz
+500000 cycles in 775 ms: 645161 Hz
+500000 cycles in 614 ms: 814332 Hz
+500000 cycles in 583 ms: 857633 Hz
+500000 cycles in 585 ms: 854701 Hz
+500000 cycles in 589 ms: 848896 Hz
+500000 cycles in 753 ms: 664011 Hz
+500000 cycles in 610 ms: 819672 Hz
+500000 cycles in 585 ms: 854701 Hz
+500000 cycles in 588 ms: 850340 Hz
+500000 cycles in 584 ms: 856164 Hz
+tg0_ctrl from coproc 0: in_words: 8104, out_words: 8096, fifo: 8/8
+tg0_ctrl elects: 393565, spins: 446398, bailouts: 392553, xfers: 1012
+ramdac0_ctrl to coproc 0: in_words: 14400, out_words: 14400, fifo: 0/96
+ramdac0_ctrl elects: 397485, spins: 426457, bailouts: 397335, xfers: 150
