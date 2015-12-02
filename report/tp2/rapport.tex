@@ -1,0 +1,63 @@
+\documentclass[12pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{float}
+\usepackage[top=3cm, bottom=3cm, left=3cm, right=3cm]{geometry}
+\usepackage{graphicx}
+\usepackage{array}
+
+\floatplacement{figure}{H}
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+
+\begin{document}
+\begin{titlepage}
+  \begin{center}
+    \textsc{\LARGE Université Pierre et Marie Curie}\\[1.5cm]
+    \includegraphics[height=1cm]{upmc.png}\\[1.5cm]
+    \textsc{\Large Rapport Archi 4 }\\[2cm]
+    \HRule \\[1cm]
+    \textsc{\huge TP2 MJPEG }\\[0.5cm]
+    \HRule \\[1cm]
+    % Author and supervisor
+    \noindent
+    \begin{minipage}[t]{0.55\textwidth}
+      \begin{flushleft} \large
+        \emph{Auteurs:}\\
+        BITAM \textsc{Massine}\\
+        TOUMLILT \textsc{Ilyas}
+      \end{flushleft}
+    \end{minipage}%
+    \begin{minipage}[t]{0.47\textwidth}
+      \begin{flushright} \large
+        \emph{Encadrant:} \\
+        MEUNIER \textsc{quentin}
+      \end{flushright}
+    \end{minipage}
+    \vfill
+    % Bottom of the page
+    {\large \today}
+  \end{center}
+\end{titlepage}
+
+\section*{Question 1}
+La syntaxe utilisée par DSX pour exprimer que le port P0 du composant matériel C0 est connecté au 
+port P1 du composant matériel C1, est la division entière //
+
+\section*{Question 2}
+Objets logiciels à placer dans une tâche :\\
+- run : ...\\
+- stack\\
+- desk \\
+dans le processeur :\\
+- private :\\
+- shared \\
+dans un canal mwmr :\\
+- buffer\\
+- status\\
+
+\section*{Question 3}
+On observe, comme pour le TP précédent, les affichages ``Producer: Hello...'' et ``Consumer: ...World'', la simulation sur le modèle systemC du SoC se fait sur un tty externe, on remarque également une différence de fréquence d'affichage, alors que sur la station de travail on a des affichages qui alternent Prod/Cons avec des décallages quelques fois, l'affichage sur le tty1 du simlateur systemC du SoC alterne des affichages par blocks de 4 prod / 4 cons, de manière plus synchrone, sans décallages.
+
+\end{document}
