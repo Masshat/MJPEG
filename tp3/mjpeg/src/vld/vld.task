@@ -1,0 +1,14 @@
+# -*- python -*-
+
+TaskModel(
+	'vld',
+	ports = {'input':MwmrInput(32),
+			 'output':MwmrOutput(128),
+			 'huffman':MwmrInput(32),
+			 },
+	impls = [ SwTask( 'vld',
+					 stack_size = 2048,
+					 sources = [ 'vld.c',
+								 '../common/block_io.c' ],
+					 defines = [ 'WIDTH', 'HEIGHT' ] )
+			 ] )
