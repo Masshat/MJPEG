@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 from dsx import *
+from vgmn_noirq_multi import VgmnNoirqMulti
 import sys
 # Declaration of all MWMR fifos
 tg_demux    = Mwmr('tg_demux'   , 32, 2)
@@ -68,10 +69,10 @@ tcg = Tcg(
 # containing this file must be defined
 #########################################################
 
-proc_nb = 2
-
-from vgmn_noirq_multi import VgmnNoirqMulti
-archi = VgmnNoirqMulti( proc_count = proc_nb, ram_count = 2)
+proc_nb = 3
+dcache_lines = int(sys.argv[1])
+icache_lines = int(sys.argv[2])
+archi = VgmnNoirqMulti( proc_count = proc_nb, ram_count = 2, dcache_lines = dcache_lines, icache_lines = icache_lines)
 
 #########################################################
 # Section C : Mapping
@@ -118,17 +119,17 @@ mapper.map( "quanti",
 # mapping the "prod0" and "cons0" tasks
 
 mapper.map("demux",
-   run   = "cpu0",
+   run   = "cpu2",
    stack = "cram0",
    desc  = "cram0"
 )
 mapper.map("vld",
-   run   = "cpu0",
+   run   = "cpu1",
    stack = "cram0",
    desc  = "cram0"
 )
 mapper.map("iqzz",
-   run   = "cpu0",
+   run   = "cpu2",
    stack = "cram0",
    desc  = "cram0"
 )
@@ -138,7 +139,7 @@ mapper.map("idct",
    desc  = "cram0"
 )
 mapper.map("libu",
-   run   = "cpu0",
+   run   = "cpu1",
    stack = "cram0",
    desc  = "cram0"
 )

@@ -1,16 +1,3 @@
-  - Building VciXcacheWrapper cpu0
-  - Building VciMultiTTy tty0
-    => segment tty0_seg / base = 90400000 / size = 20
-  - Building VciVgmn : vgmn0
-    => targets        = 5
-    => initiators     = 3
-    => default target = 0
-Loading at 0x10000000 size 0x100000: .cram0 
-Loading at 0x10400000 size 0x100000: nothing
-Loading at 0x20000000 size 0x100000: .cram1 .text .rodata .contextdata 
-Loading at 0x20400000 size 0x100000: .uram1 .data 
-Loading at 0xbfc00000 size 0x1000: .boot 
-Loading at 0x80000080 size 0x1000: .excep 
 500000 cycles in 765 ms: 653595 Hz
 500000 cycles in 782 ms: 639386 Hz
 500000 cycles in 782 ms: 639386 Hz
@@ -140,7 +127,3 @@ Loading at 0x80000080 size 0x1000: .excep
 500000 cycles in 587 ms: 851789 Hz
 500000 cycles in 587 ms: 851789 Hz
 500000 cycles in 716 ms: 698324 Hz
-tg0_ctrl from coproc 0: in_words: 8112, out_words: 8104, fifo: 8/8
-tg0_ctrl elects: 393546, spins: 447100, bailouts: 392533, xfers: 1013
-ramdac0_ctrl to coproc 0: in_words: 14400, out_words: 14400, fifo: 0/96
-ramdac0_ctrl elects: 397515, spins: 426685, bailouts: 397365, xfers: 150
