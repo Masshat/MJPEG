@@ -69,10 +69,10 @@ tcg = Tcg(
 # containing this file must be defined
 #########################################################
 
-proc_nb = 3
-dcache_lines = int(sys.argv[1])
-icache_lines = int(sys.argv[2])
-archi = VgmnNoirqMulti( proc_count = proc_nb, ram_count = 2, dcache_lines = dcache_lines, icache_lines = icache_lines)
+proc_nb = 2
+dcache_l = int(sys.argv[1])
+icache_l = int(sys.argv[2])
+archi = VgmnNoirqMulti( proc_count = proc_nb, ram_count = 2, dcache_lines = dcache_l, icache_lines = icache_l)
 
 #########################################################
 # Section C : Mapping
@@ -119,7 +119,7 @@ mapper.map( "quanti",
 # mapping the "prod0" and "cons0" tasks
 
 mapper.map("demux",
-   run   = "cpu2",
+   run   = "cpu1",
    stack = "cram0",
    desc  = "cram0"
 )
@@ -129,7 +129,7 @@ mapper.map("vld",
    desc  = "cram0"
 )
 mapper.map("iqzz",
-   run   = "cpu2",
+   run   = "cpu0",
    stack = "cram0",
    desc  = "cram0"
 )
