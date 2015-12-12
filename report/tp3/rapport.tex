@@ -7,11 +7,13 @@
 \usepackage[top=3cm, bottom=3cm, left=3cm, right=3cm]{geometry}
 \usepackage{graphicx}
 \usepackage{array}
+\usepackage{setspace}
 
 \floatplacement{figure}{H}
 \newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
 
 \begin{document}
+%\vspace{-1cm}
 \begin{titlepage}
   \begin{center}
     \textsc{\LARGE Université Pierre et Marie Curie}\\[1.5cm]
@@ -40,16 +42,52 @@
     {\large \today}
   \end{center}
 \end{titlepage}
-
+%\linespread{0.3}  % a suprimé si problème de compil
 \section*{Question 1}
-
+Il faut a peu pres 64 millions de cycles pour décompresser 25 images.
 \section*{Question 2}
+en se basant sur les résultats du profiling donnée dans l'énoncé, nous pensons que la façon la plus optimale pour le déploiment de l'application sur un MPSOC est d'équilibré la charge entre les processeurs.\\ 
+\begin{itemize}
+\item Sur 2 processeurs nous avons choisi de déploiyer idct et iqzz sur le même processeur et le reste des taches sur le deuxieme processeur.\\
+\item Sur 3 processeurs nous avons choisi de déploiyer idct sur un proc, (vld et libu) sur le même proc, (demux et iqzz) sur le 3eme proc.\\
+\item Sur 4 processeurs nous avons choisi de déploiyer idct, vld, et demux chacune sur un proc, et iqzz et libu ensemble sur le même proc.\\
+\item Sur 5 processeurs nous avons choisi de déploiyer une tache par processeur, cette configuration c'est montré pas trés optimale car la tache libu ne fais casiment rien,cette configration est moins bonne que celle sur 4 processeurs, et nous soupsonnant que c'est due au temps perdu dans le canal de communication entre idct et libu.
+\end{itemize}
 \section*{Question 3}
+Il faut a peu pres 23 millions de cycles pour décompresser 25 images.
 \section*{Question 4}
 
 \section*{Question 5}
-
+Il faut a peu pres 22 millions de cycles pour décompresser 25 images.
 \section*{Question 6}
-
+Il faut a peu pres 28 millions de cycles pour décompresser 25 images.
 \section*{Question 7}
+Il faut a peu pres 40 millions de cycles pour décompresser 25 images.
+\section*{Question 8}
+\begin{tabular}{|c|c|c|}
+    \hline
+    dcache & icache & cycles (millions) \\
+    \hline
+    1024 & 1024 & 10 \\
+    1024 &  256 & 10,5 \\
+    1024 &   64 & 15 \\
+    1024 &   16 & 20 \\
+    1024 &    4 & 28 \\
+    1024 &    1 & 37 \\
+    \hline
+  \end{tabular}
+  \hspace{2cm}
+  \begin{tabular}{|c|c|c|}
+    \hline
+    dcache & icache & cycles (millions) \\
+    \hline
+    1024 & 1024 & 10 \\
+     256 & 1024 & 10 \\
+      64 & 1024 & 10 \\
+      16 & 1024 & 11 \\
+       4 & 1024 & 14,5 \\
+       1 & 1024 & 22 \\
+    \hline
+  \end{tabular}
+\section*{Question 9}
 \end{document}
