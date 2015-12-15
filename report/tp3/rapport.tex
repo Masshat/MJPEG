@@ -44,25 +44,25 @@
 \end{titlepage}
 %\linespread{0.3}  % a suprimé si problème de compil
 \section*{Question 1}
-Il faut a peu pres 64 millions de cycles pour décompresser 25 images.
+Il faut à peu près 64 millions de cycles pour décompresser 25 images.
 \section*{Question 2}
-en se basant sur les résultats du profiling donnée dans l'énoncé, nous pensons que la façon la plus optimale pour le déploiment de l'application sur un MPSOC est d'équilibré la charge entre les processeurs.\\ 
+En se basant sur les résultats du profiling donnés dans l'énoncé, nous pensons que la façon la plus optimale pour le déploiment de l'application sur un MPSOC est d'équilibrer la charge entre les processeurs.\\ 
 \begin{itemize}
-\item Sur 2 processeurs nous avons choisi de déploiyer idct et iqzz sur le même processeur et le reste des taches sur le deuxieme processeur.\\
-\item Sur 3 processeurs nous avons choisi de déploiyer idct sur un proc, (vld et libu) sur le même proc, (demux et iqzz) sur le 3eme proc.\\
-\item Sur 4 processeurs nous avons choisi de déploiyer idct, vld, et demux chacune sur un proc, et iqzz et libu ensemble sur le même proc.\\
-\item Sur 5 processeurs nous avons choisi de déploiyer une tache par processeur, cette configuration c'est montré pas trés optimale car la tache libu ne fais casiment rien,cette configration est moins bonne que celle sur 4 processeurs, et nous soupsonnant que c'est due au temps perdu dans le canal de communication entre idct et libu.
+\item Sur 2 processeurs nous avons choisi de déployer idct et iqzz sur le même processeur et le reste des tâches sur le deuxième processeur.\\
+\item Sur 3 processeurs nous avons choisi de déployer idct sur un proc, (vld et libu) sur le même proc, (demux et iqzz) sur le 3ème proc.\\
+\item Sur 4 processeurs nous avons choisi de déployer idct, vld, et demux chacune sur un proc, et iqzz et libu ensemble sur le même proc.\\
+\item Sur 5 processeurs nous avons choisi de déployer une tâche par processeur, cette configuration s'est montrée non optimale car la tâche libu ne fais quasiment rien, cette configration est moins bonne que celle sur 4 processeurs, et nous soupçonnons que c'est dû au temps perdu dans le canal de communication entre idct et libu (la donnée est dans le cache, et n'a pas besoin d'être envoiyé dans le canal MWMR)
 \end{itemize}
 \section*{Question 3}
-Il faut a peu pres 23 millions de cycles pour décompresser 25 images.
+Il faut à peu près 23 millions de cycles pour décompresser 25 images.
 \section*{Question 4}
-
+Selon nous, le processeur le plus chargé est le processeur qui éxecute la tâche idct, nous avons donc décidé de lancer des simulations sur une architecture a 2 processeurs, et à chaque fois on place une tâche sur le proc0, et le reste des tâches sur le proc1. Il s'est avéré que c'est la tache VLD qui prend le plus de temps a s'exécuter, donc le processeur le plus chargé sera celui qui éxécute cette dernière.
 \section*{Question 5}
-Il faut a peu pres 22 millions de cycles pour décompresser 25 images.
+Il faut à peu près 22 millions de cycles pour décompresser 25 images.
 \section*{Question 6}
-Il faut a peu pres 28 millions de cycles pour décompresser 25 images.
+Il faut à peu près 28 millions de cycles pour décompresser 25 images.
 \section*{Question 7}
-Il faut a peu pres 40 millions de cycles pour décompresser 25 images.
+Il faut à peu près 40 millions de cycles pour décompresser 25 images.
 \section*{Question 8}
 \begin{tabular}{|c|c|c|}
     \hline
@@ -90,4 +90,5 @@ Il faut a peu pres 40 millions de cycles pour décompresser 25 images.
     \hline
   \end{tabular}
 \section*{Question 9}
+Dans notre cas, nous avons choisi un cache de données à 16 lignes et un cache d'instructions à 64 lignes, nous avons remarqué que pour ce type d'applications nous avons beaucoup d'instructions à éxécuter et il faut exploiter la localité temporelle ; par contre pour le cache de données, nous avons qu'une seule image à traiter et donc un cache à 16 lignes semble bien adapté.\\
 \end{document}
