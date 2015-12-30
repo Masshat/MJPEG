@@ -1,75 +1,104 @@
 #!/usr/bin/env python
-
 from dsx import *
 from vgmn_noirq_multi import VgmnNoirqMulti
 import sys
+
 # Declaration of all MWMR fifos
 tg_split        = Mwmr('tg_split'   , 32, 2)
 
-split_demux1    = Mwmr('tg_split'   , 32, 4)
-split_demux2    = Mwmr('tg_split'   , 32, 4)
+split_demux1    = Mwmr('split_demux1'   , 32, 2)
+split_demux2    = Mwmr('split_demux2'   , 32, 2)
 
 demux_vld1  	= Mwmr('demux_vld1'  , 32, 2)
-vld_iqzz1   	= Mwmr('vld_iqzz1'   , 128, 2)
-iqzz_idct1  	= Mwmr('iqzz_idct1'  , 256, 2)
-idct_libu1  	= Mwmr('idct_libu1'  , 64, 4)
-
 demux_vld2  	= Mwmr('demux_vld2'  , 32, 2)
+vld_iqzz1   	= Mwmr('vld_iqzz1'   , 128, 2)
 vld_iqzz2   	= Mwmr('vld_iqzz2'   , 128, 2)
+iqzz_idct1  	= Mwmr('iqzz_idct1'  , 256, 2)
 iqzz_idct2  	= Mwmr('iqzz_idct2'  , 256, 2)
-idct_libu2  	= Mwmr('idct_libu2'  , 64, 4)
+idct_libu1  	= Mwmr('idct_libu1'  , 64, 2)
+idct_libu2  	= Mwmr('idct_libu2'  , 64, 2)
 
-demux_vld  	= Mwmr('demux_vld'  , 32, 2)
-vld_iqzz   	= Mwmr('vld_iqzz'   , 128, 2)
-iqzz_idct  	= Mwmr('iqzz_idct'  , 256, 2)
-idct_libu  	= Mwmr('idct_libu'  , 64, 2)
-huffman    	= Mwmr('huffman'    , 32, 2)
-quanti     	= Mwmr('quanti'     , 64, 2)
+
+huffman1    	= Mwmr('huffman1'    , 32, 2)
+quanti1     	= Mwmr('quanti1'     , 64, 2)
+huffman2    	= Mwmr('huffman2'    , 32, 2)
+quanti2     	= Mwmr('quanti2'     , 64, 2)
 
 libu_ramdac	= Mwmr('libu_ramdac', 48*8, 2)
 
 tcg = Tcg(
 
     Task( 'tg', "tg",
-          {'output':tg_demux },
+          {'output':tg_split },
           defines = {'FILE_NAME':'"plan.mjpg"'}),
     
-	Task( 'split', "split",
+    Task( 'split', "split",
           { 'input':tg_split,
-            'output':demux_vld}
+            'output0':split_demux1,
+            'output1':split_demux2},
+            defines = {'WIDTH':"48",
+                       'HEIGHT':"48"}),
+    Task( 'demux1', "demux",
+          { 'input':split_demux1,
+            'output':demux_vld1,
+            'huffman':huffman1,
+            'quanti':quanti1 },
             defines = {'WIDTH':"48",
                        'HEIGHT':"48"}),
 
-    Task( 'demux', "demux",
-          { 'input':tg_demux,
-            'output':demux_vld,
-            'huffman':huffman,
-            'quanti':quanti },
+    Task( 'demux2', "demux",
+          { 'input':split_demux2,
+            'output':demux_vld2,
+            'huffman':huffman2,
+            'quanti':quanti2 },
             defines = {'WIDTH':"48",
                        'HEIGHT':"48"}),
 
-    Task( 'vld', "vld",
-	  {'input':demux_vld,
-	   'output':vld_iqzz,
-	   'huffman':huffman },
+    Task( 'vld1', "vld",
+	  {'input':demux_vld1,
+	   'output':vld_iqzz1,
+	   'huffman':huffman1 },
             defines = {'WIDTH':"48",
                        'HEIGHT':"48"}),
     
-    Task( 'iqzz', "iqzz",
-	  {'input':vld_iqzz,
-	   'output':iqzz_idct,
-	   'quanti':quanti },
+
+    Task( 'vld2', "vld",
+	  {'input':demux_vld2,
+	   'output':vld_iqzz2,
+	   'huffman':huffman2 },
+            defines = {'WIDTH':"48",
+                       'HEIGHT':"48"}),
+    
+    Task( 'iqzz1', "iqzz",
+	  {'input':vld_iqzz1,
+	   'output':iqzz_idct1,
+	   'quanti':quanti1 },
+            defines = {'WIDTH':"48",
+                       'HEIGHT':"48"}),
+    
+    Task( 'iqzz2', "iqzz",
+	  {'input':vld_iqzz2,
+	   'output':iqzz_idct2,
+	   'quanti':quanti2 },
             defines = {'WIDTH':"48",
                        'HEIGHT':"48"}),
 
-    Task( 'idct', "idct",
-	  {'input':iqzz_idct,
-	   'output':idct_libu},
+    Task( 'idct1', "idct",
+	  {'input':iqzz_idct1,
+	   'output':idct_libu1},
+            defines = {'WIDTH':"48",
+                       'HEIGHT':"48"}),
+
+
+    Task( 'idct2', "idct",
+	  {'input':iqzz_idct2,
+	   'output':idct_libu2},
             defines = {'WIDTH':"48",
                        'HEIGHT':"48"}),
 
     Task( 'libu', "libu",
-	  {'input':idct_libu,
+	  {'input0':idct_libu1,
+	   'input1':idct_libu2,
 	   'output':libu_ramdac},
             defines = {'WIDTH':"48",
                        'HEIGHT':"48"}),
@@ -80,125 +109,5 @@ tcg = Tcg(
                        'HEIGHT':"48"}),
     )
 
-#p = Posix()
-#tcg.generate(p)
-#########################################################
-# Section B : Hardware architecture
-#
-# The file containing the architecture definition
-# must be included, and the path to the directory
-# containing this file must be defined
-#########################################################
-
-proc_nb = 2
-dcache_l = int(sys.argv[1])
-icache_l = int(sys.argv[2])
-archi = VgmnNoirqMulti( proc_count = proc_nb, ram_count = 2, dcache_lines = dcache_l, icache_lines = icache_l)
-
-#########################################################
-# Section C : Mapping
-#
-#########################################################
-
-mapper = Mapper(archi, tcg)
-
-# mapping the MWMR channel
-
-mapper.map( "tg_demux",
-  buffer = "cram1",
-  status = "cram1"
-)
-mapper.map( "demux_vld",
-  buffer = "cram1",
-  status = "cram1"
-)
-mapper.map( "vld_iqzz",
-  buffer = "cram1",
-  status = "cram1"
-)
-mapper.map( "iqzz_idct",
-  buffer = "cram1",
-  status = "cram1"
-)
-mapper.map( "idct_libu",
-  buffer = "cram1",
-  status = "cram1"
-)
-mapper.map( "libu_ramdac",
-  buffer = "cram1",
-  status = "cram1"
-)
-mapper.map( "huffman",
-  buffer = "cram1",
-  status = "cram1"
-)
-mapper.map( "quanti",
-  buffer = "cram1",
-  status = "cram1"
-)
-
-# mapping the "prod0" and "cons0" tasks
-
-mapper.map("demux",
-   run   = "cpu1",
-   stack = "cram0",
-   desc  = "cram0"
-)
-mapper.map("vld",
-   run   = "cpu1",
-   stack = "cram0",
-   desc  = "cram0"
-)
-mapper.map("iqzz",
-   run   = "cpu0",
-   stack = "cram0",
-   desc  = "cram0"
-)
-mapper.map("idct",
-   run   = "cpu0",
-   stack = "cram0",
-   desc  = "cram0"
-)
-mapper.map("libu",
-   run   = "cpu1",
-   stack = "cram0",
-   desc  = "cram0"
-)
-# mapping the software objects associated to a processor
-for i in range(proc_nb):
-	  mapper.map( 'cpu%d'%i,
-	   		 private = "cram0",
-	   		 shared  = "uram0")
-
-mapper.map('tg',
-	  coprocessor = 'tg0',
-	  controller = 'tg0_ctrl'
-	  )
-mapper.map('ramdac',
-	  coprocessor = 'ramdac0',
-	  controller = 'ramdac0_ctrl'
-	  )
-# mapping the software objects used by the embedded OS
-
-mapper.map(tcg,
-  private = "cram1",
-  shared  = "uram1",
-  code    = "cram1",
-
-  # These lines are for getting output messages:
-  tty = "tty0",
-  tty_no = 0)
-
-######################################################
-# Section D : Code generation
-######################################################
-
-# Embedded software linked with the Mutek/S OS
-
-mapper.generate( MutekS() )
-#mapper.generate( MutekH() )
-
-# The software application for a POSX workstation can still be generated
-
-tcg.generate( Posix() )
-
+p = Posix()
+tcg.generate(p)

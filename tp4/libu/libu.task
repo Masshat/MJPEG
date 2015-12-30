@@ -2,8 +2,8 @@
 
 TaskModel(
 	'libu',
-	ports = {'input0':MwmrInput(64),
-			 'input1':MwmrInput(64),
+	ports = {'input1':MwmrInput(64),
+		 'input2':MwmrInput(64),
 			 'output':MwmrOutput(8*48),
 			 },
 	impls = [ SwTask( 'libu',
