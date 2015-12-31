@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 from dsx import *
-from vgmn_noirq_multi import VgmnNoirqMulti
+from clustered_noirq_multi import ClusteredNoirqMulti
 import sys
 
 # Declaration of all MWMR fifos
@@ -108,5 +108,96 @@ tcg = Tcg(
                        'HEIGHT':"48"}),
     )
 
-p = Posix()
-tcg.generate(p)
+#p = Posix()
+#tcg.generate(p)
+
+#########################################################
+# Section B : Hardware architecture
+#
+# The file containing the architecture definition
+# must be included, and the path to the directory
+# containing this file must be defined
+#########################################################
+
+proc_nb = 2
+cpu_count = [1, 2, 2, 1]
+ram_count = [1, 1, 1, 1]
+
+#dcache_l = int(sys.argv[1])
+#icache_l = int(sys.argv[2])
+
+archi = ClusteredNoirqMulti(cpu_count, ram_count, min_latency = 10)
+#archi = ClusteredNoirqMulti(cpus = cpu_count, rams = ram_count, min_latency = 10)
+##########################################################
+# Section C : Mapping		  			 #
+##########################################################
+
+mapper = Mapper (archi, tcg)
+
+# mapping the MWMR channel
+
+mapper.map( "tg_split",    buffer = "cram0_0", status = "cram0_0")
+mapper.map( "libu_ramdac", buffer = "cram3_0", status = "cram3_0")
+#PIPE 1
+mapper.map("split_demux1", buffer = "cram0_0", status = "cram0_0")
+mapper.map( "demux_vld1",  buffer = "cram1_0", status = "cram1_0")
+mapper.map( "vld_iqzz1",   buffer = "cram1_0", status = "cram1_0")
+mapper.map( "iqzz_idct1",  buffer = "cram3_0", status = "cram3_0")
+mapper.map( "idct_libu1",  buffer = "cram1_0", status = "cram1_0")
+mapper.map( "huffman1",    buffer = "cram1_0", status = "cram1_0")
+mapper.map( "quanti1",     buffer = "cram1_0", status = "cram1_0")
+#PIPE 2
+mapper.map("split_demux2", buffer = "cram0_0", status = "cram0_0")
+mapper.map( "demux_vld2",  buffer = "cram2_0", status = "cram2_0")
+mapper.map( "vld_iqzz2",   buffer = "cram2_0", status = "cram2_0")
+mapper.map( "iqzz_idct2",  buffer = "cram3_0", status = "cram3_0")
+mapper.map( "idct_libu2",  buffer = "cram2_0", status = "cram2_0")
+mapper.map( "huffman2",    buffer = "cram2_0", status = "cram2_0")
+mapper.map( "quanti2",     buffer = "cram3_0", status = "cram3_0")
+# mapping the "prod0" and "cons0" tasks
+mapper.map("split",  run = "cpu0_0", stack = "cram0_0", desc  = "cram0_0")
+#1
+mapper.map("demux1", run = "cpu1_0", stack = "cram0_0", desc  = "cram0_0")
+mapper.map("vld1",   run = "cpu1_1", stack = "cram1_0", desc  = "cram1_0")
+mapper.map("iqzz1",  run = "cpu1_0", stack = "cram1_0", desc  = "cram1_0")
+mapper.map("idct1",  run = "cpu1_1", stack = "cram1_0", desc  = "cram1_0")
+#2
+mapper.map("demux2", run = "cpu2_0", stack = "cram0_0", desc  = "cram0_0")
+mapper.map("vld2",   run = "cpu2_1", stack = "cram2_0", desc  = "cram2_0")
+mapper.map("iqzz2",  run = "cpu2_0", stack = "cram2_0", desc  = "cram2_0")
+mapper.map("idct2",  run = "cpu2_1", stack = "cram2_0", desc  = "cram2_0")
+
+mapper.map("libu",   run = "cpu3_0", stack = "cram3_0", desc  = "cram3_0")
+
+# mapping the software objects associated to a processor
+hey = 4
+for i,proc in enumerate(cpu_count):
+#for i in range (hey):
+	for j in range(proc):
+	#for j in range(cpu_count[i]):
+		  mapper.map( 'cpu%d_%d'%(i,j),
+		   		 private = "cram%d_0"%(i),
+		   		 shared  = "uram%d_0"%(i))
+mapper.map('tg',
+	  coprocessor = 'tg0',
+	  controller = 'tg0_ctrl'
+	  )
+mapper.map('ramdac',
+	  coprocessor = 'ramdac0',
+	  controller = 'ramdac0_ctrl'
+	  )
+# mapping the software objects used by the embedded OS
+
+mapper.map(tcg,
+       	   private = "cram1_0",
+       	   shared  = "uram1_0",
+       	   code    = "cram1_0",
+       	   tty = "tty",
+       	   tty_no = 0)
+
+#####################################################
+# Section D : Code generation                       #
+#####################################################
+#Embedded software linked with the Mutek/S OS
+mapper.generate( MutekS() )
+#mapper.generate( MutekH() )
