@@ -18,7 +18,6 @@ iqzz_idct2  	= Mwmr('iqzz_idct2'  , 256, 2)
 idct_libu1  	= Mwmr('idct_libu1'  , 64, 2)
 idct_libu2  	= Mwmr('idct_libu2'  , 64, 2)
 
-
 huffman1    	= Mwmr('huffman1'    , 32, 2)
 quanti1     	= Mwmr('quanti1'     , 64, 2)
 huffman2    	= Mwmr('huffman2'    , 32, 2)
@@ -34,8 +33,8 @@ tcg = Tcg(
     
     Task( 'split', "split",
           { 'input':tg_split,
-            'output0':split_demux1,
-            'output1':split_demux2},
+            'output1':split_demux1,
+            'output2':split_demux2},
             defines = {'WIDTH':"48",
                        'HEIGHT':"48"}),
     Task( 'demux1', "demux",
@@ -97,8 +96,8 @@ tcg = Tcg(
                        'HEIGHT':"48"}),
 
     Task( 'libu', "libu",
-	  {'input0':idct_libu1,
-	   'input1':idct_libu2,
+	  {'input1':idct_libu1,
+	   'input2':idct_libu2,
 	   'output':libu_ramdac},
             defines = {'WIDTH':"48",
                        'HEIGHT':"48"}),

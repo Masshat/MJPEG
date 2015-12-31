@@ -1,8 +1,0 @@
-TaskModel(
-        'consumer',
-        ports = { 'input' : MwmrInput(32) },
-        impls = [
-                SwTask('cons_func',
-                           stack_size = 2048,
-                           sources = ['consumer.c'])
-        ] )

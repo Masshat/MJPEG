@@ -1,8 +1,0 @@
-TaskModel(
-        'producer',
-        ports = { 'output' : MwmrOutput(32) },
-        impls = [
-                SwTask('prod_func',
-                           stack_size = 2048,
-                           sources = ['producer.c'])
-        ] )

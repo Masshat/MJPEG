@@ -1,5 +1,5 @@
 all :
-	./mjpeg 256 1024
+	./mjpeg
 
 clean :
 	rm -rf  exe.* posix muteks srl_trace.txt *.pyc wt.*
