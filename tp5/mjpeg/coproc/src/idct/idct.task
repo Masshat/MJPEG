@@ -1,0 +1,21 @@
+# -*- python -*-
+from soclib.hwtask import HwTask, MwmrCoproc, SyntheticTask
+TaskModel(
+	'idct',
+	ports = {'input':MwmrInput(256),
+			 'output':MwmrOutput(64),
+			 },
+	impls = [ SwTask( 'idct',
+	       		  stack_size = 4096,
+	 		  sources = [ 'idct.c' ],
+	 		  defines = [ 'WIDTH', 'HEIGHT' ] ),
+		  #SyntheticTask(defines = {'EXEC_TIME':"1024",'WIDTH':"48",'HEIGHT':"48"})
+		   MwmrCoproc(
+					module = 'caba:fifo_idct',
+					from_coproc = [ 'output:to_ctrl' ],
+					to_coproc = [ 'input:from_ctrl' ],
+					config = [],
+					status = [],
+					latency = 160, # 576, 704, 1856
+					word_t = 'uint32_t' )
+			 ] )

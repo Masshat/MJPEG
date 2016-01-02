@@ -1,0 +1,13 @@
+# -*- python -*-
+from soclib import SyntheticTask
+TaskModel(
+	'idct',
+	ports = {'input':MwmrInput(256),
+			 'output':MwmrOutput(64),
+			 },
+	impls = [ SwTask( 'idct',
+	       		  stack_size = 1024,
+	 		  sources = [ 'idct.c' ],
+	 		  defines = [ 'WIDTH', 'HEIGHT' ] ),
+		  SyntheticTask(defines = {'EXEC_TIME':"1024",'WIDTH':"48",'HEIGHT':"48"})
+			 ] )
