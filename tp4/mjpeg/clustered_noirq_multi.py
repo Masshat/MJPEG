@@ -7,23 +7,22 @@ def _cluster(arch, no,
              icache_lines, icache_words,
              dcache_lines, dcache_words):
 
-    #crossbar = arch.create('caba:vci_local_crossbar', 'lc%d'%no)
-    crossbar = arch.create('caba:vci_local_crossbar', 'lc0')
+    crossbar = arch.create('caba:vci_local_crossbar', 'lc%d'%no)
 
     for i in range(ncpu):
         cn = arch.cpu_num
         arch.cpu_num += 1
 
         cpu = arch.create('caba:vci_xcache_wrapper', 'cpu%d_%d'%(no,i),
-                           iss_t='common:mips32el',
-                           ident = cn,
-                           icache_ways = 1,
-                           icache_sets = icache_lines,
-                           icache_words = icache_words,
-                           dcache_ways = 1,
-                           dcache_sets = dcache_lines,
-                           dcache_words = dcache_words,
-                           )
+                          iss_t='common:mips32el',
+                          ident = cn,
+                          icache_ways = 1,
+                          icache_sets = icache_lines,
+                          icache_words = icache_words,
+                          dcache_ways = 1,
+                          dcache_sets = dcache_lines,
+                          dcache_words = dcache_words,
+                          )
 
         crossbar.to_initiator.new() // cpu.vci
 
@@ -50,24 +49,24 @@ def ClusteredNoirqMulti(
     dcache_words = 8 ):
 
     arch = soclib.Architecture(
-                         cell_size = 4,
-                         plen_size = 9,
-                         addr_size = 32,
-                         rerror_size = 1,
-                         clen_size = 1,
-                         rflag_size = 1,
-                         srcid_size = 8,
-                         pktid_size = 1,
-                         trdid_size = 1,
-                         wrplen_size = 1
-                         )
+        cell_size = 4,
+        plen_size = 9,
+        addr_size = 32,
+        rerror_size = 1,
+        clen_size = 1,
+        rflag_size = 1,
+        srcid_size = 8,
+        pktid_size = 1,
+        trdid_size = 1,
+        wrplen_size = 1
+        )
     arch.cpu_num = 0
 
     mt = arch.create('common:mapping_table',
-              'mapping_table',
-              addr_bits = [5,3],
-              srcid_bits = [4,4],
-              cacheability_mask = 0xc00000)
+                     'mapping_table',
+                     addr_bits = [5,3],
+                     srcid_bits = [4,4],
+                     cacheability_mask = 0xc00000)
 
     arch.create('common:loader', 'loader')
 

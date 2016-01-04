@@ -44,5 +44,84 @@
 \end{titlepage}
 %\linespread{0.3}  % a suprimé si problème de compil
 \section*{Question 1}
+Il serait plus efficace que la tâche split ne soit pas ``gênée'' par une attente sur le canal split->demux, et donc il serait plus intéressant d'augmenter la profondeur de ce dernier pour optimiser le parallèlisme, la profondeur la plus efficace aurait donc une valeur équivalente à celle de la taille de son banc mémoire, c'est à dire 32. D'ailleurs en testant, on confirme bien qu'une profondeur de 32 est 52\% plus efficace qu'une profondeur de 2.\\
+Pour les fifos idct0->libu et idct1->libu,on considère que libu s'exécute plus rapidement que la moitié du temps d'exécution d'un pipeline. Il n'est donc pas nécessaire de changer la profondeur des canaux idct->libu.
+
+\section*{Question 2}
+\textbf{Configuration 1:}\\
+mapper.map( "tg\_split",    buffer = "cram0\_0", status = "cram0\_0")\\
+mapper.map( "libu\_ramdac", buffer = "cram3\_0", status = "cram3\_0")\\
+\#PIPE 1\\
+mapper.map("split\_demux1", buffer = "cram0\_0", status = "cram0\_0")\\
+mapper.map( "demux\_vld1",  buffer = "cram1\_0", status = "cram1\_0")\\
+mapper.map( "vld\_iqzz1",   buffer = "cram1\_0", status = "cram1\_0")\\
+mapper.map( "iqzz\_idct1",  buffer = "cram3\_0", status = "cram3\_0")\\
+mapper.map( "idct\_libu1",  buffer = "cram1\_0", status = "cram1\_0")\\
+mapper.map( "huffman1",    buffer = "cram1\_0", status = "cram1\_0")\\
+mapper.map( "quanti1",     buffer = "cram1\_0", status = "cram1\_0")\\
+\#PIPE 2\\
+mapper.map("split\_demux2", buffer = "cram0\_0", status = "cram0\_0")\\
+mapper.map( "demux\_vld2",  buffer = "cram2\_0", status = "cram2\_0")\\
+mapper.map( "vld\_iqzz2",   buffer = "cram2\_0", status = "cram2\_0")\\
+mapper.map( "iqzz\_idct2",  buffer = "cram3\_0", status = "cram3\_0")\\
+mapper.map( "idct\_libu2",  buffer = "cram2\_0", status = "cram2\_0")\\
+mapper.map( "huffman2",    buffer = "cram2\_0", status = "cram2\_0")\\
+mapper.map( "quanti2",     buffer = "cram3\_0", status = "cram3\_0")\\
+\# mapping the "prod0" and "cons0" tasks\\
+mapper.map("split",  run = "cpu0\_0", stack = "cram0\_0", desc  = "cram0\_0")\\
+\#1\\
+mapper.map("demux1", run = "cpu1\_0", stack = "cram0\_0", desc  = "cram0\_0")\\
+mapper.map("vld1",   run = "cpu1\_1", stack = "cram1\_0", desc  = "cram1\_0")\\
+mapper.map("iqzz1",  run = "cpu1\_0", stack = "cram1\_0", desc  = "cram1\_0")\\
+mapper.map("idct1",  run = "cpu1\_1", stack = "cram1\_0", desc  = "cram1\_0")\\
+\#2\\
+mapper.map("demux2", run = "cpu2\_0", stack = "cram0\_0", desc  = "cram0\_0")\\
+mapper.map("vld2",   run = "cpu2\_1", stack = "cram2\_0", desc  = "cram2\_0")\\
+mapper.map("iqzz2",  run = "cpu2\_0", stack = "cram2\_0", desc  = "cram2\_0")\\
+mapper.map("idct2",  run = "cpu2\_1", stack = "cram2\_0", desc  = "cram2\_0")\\
+\\
+mapper.map("libu",   run = "cpu3\_0", stack = "cram3\_0", desc  = "cram3\_0")\\
+\\
+\textbf{Configuration 2:}\\
+mapper.map( "tg\_split",    buffer = "cram0\_0", status = "cram0\_0")\\
+mapper.map( "libu\_ramdac", buffer = "cram3\_0", status = "cram3\_0")\\
+\#PIPE 1\\
+mapper.map("split\_demux1", buffer = "cram0\_0", status = "cram0\_0")\\
+mapper.map( "demux\_vld1",  buffer = "cram1\_0", status = "cram1\_0")\\
+mapper.map( "vld\_iqzz1",   buffer = "cram1\_0", status = "cram1\_0")\\
+mapper.map( "iqzz\_idct1",  buffer = "cram2\_0", status = "cram2\_0")\\
+mapper.map( "idct\_libu1",  buffer = "cram3\_0", status = "cram3\_0")\\
+mapper.map( "huffman1",    buffer = "cram0\_0", status = "cram0\_0")\\
+mapper.map( "quanti1",     buffer = "cram1\_0", status = "cram1\_0")\\
+\#PIPE 2\\
+mapper.map("split\_demux2", buffer = "cram0\_0", status = "cram0\_0")\\
+mapper.map( "demux\_vld2",  buffer = "cram1\_0", status = "cram1\_0")\\
+mapper.map( "vld\_iqzz2",   buffer = "cram1\_0", status = "cram1\_0")\\
+mapper.map( "iqzz\_idct2",  buffer = "cram2\_0", status = "cram2\_0")\\
+mapper.map( "idct\_libu2",  buffer = "cram3\_0", status = "cram3\_0")\\
+mapper.map( "huffman2",    buffer = "cram0\_0", status = "cram0\_0")\\
+mapper.map( "quanti2",     buffer = "cram1\_0", status = "cram1\_0")\\
+\# mapping the "prod0" and "cons0" tasks\\
+mapper.map("split",  run = "cpu0\_0", stack = "cram0\_0", desc  = "cram0\_0")\\
+\#1\\
+mapper.map("demux1", run = "cpu0\_0", stack = "cram0\_0", desc  = "cram0\_0")\\
+mapper.map("vld1",   run = "cpu1\_1", stack = "cram1\_0", desc  = "cram1\_0")\\
+mapper.map("iqzz1",  run = "cpu1\_0", stack = "cram1\_0", desc  = "cram1\_0")\\
+mapper.map("idct1",  run = "cpu2\_0", stack = "cram1\_0", desc  = "cram1\_0")\\
+\#2\\
+mapper.map("demux2", run = "cpu1\_0", stack = "cram0\_0", desc  = "cram0\_0")\\
+mapper.map("vld2",   run = "cpu2\_1", stack = "cram2\_0", desc  = "cram2\_0")\\
+mapper.map("iqzz2",  run = "cpu2\_0", stack = "cram2\_0", desc  = "cram2\_0")\\
+mapper.map("idct2",  run = "cpu3\_0", stack = "cram2\_0", desc  = "cram2\_0")\\
+\\
+mapper.map("libu",   run = "cpu3\_0", stack = "cram3\_0", desc  = "cram3\_0")\\
+\\
+\textbf{Nombres de cycles obtenus:}\\
+Config1:260000000 \\
+Config2:285000000 \\
+
+\section*{Question 3}
+Les performances sont meilleures quand les tâches communiquantes et leurs canaux de communication sont sur un même cluster.\\
+De plus, il est préférable dans un même cluster, d'éviter de mettre deux taches qui se suivent séquentiellement sur un même CPU.
 
 \end{document}
