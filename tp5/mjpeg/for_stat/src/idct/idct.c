@@ -8,7 +8,7 @@
 #define	INT_MIN	((int32_t)0x80000000)
 
 /* Useful constants: */
-#define EXEC_TIME 8000
+#define EXEC_TIME 16000
 /* ck = cos(k*pi/16) = s8-k = sin((8-k)*pi/16) times 1 << C_BITS and rounded */
 #define c0_1  16384
 #define c0_s2 23170

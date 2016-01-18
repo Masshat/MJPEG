@@ -71,9 +71,9 @@ tcg = Tcg(
 #########################################################
 
 proc_nb = 2
-dcache_l = int(sys.argv[1])
-icache_l = int(sys.argv[2])
-archi = VgmnNoirqMulti( proc_count = proc_nb, ram_count = 2, dcache_lines = dcache_l, icache_lines = icache_l)
+#dcache_l = int(sys.argv[1])
+#icache_l = int(sys.argv[2])
+archi = VgmnNoirqMulti( proc_count = proc_nb, ram_count = 2)
 
 #########################################################
 # Section C : Mapping
