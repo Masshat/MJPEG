@@ -16,6 +16,7 @@ TaskModel(
 					to_coproc = [ 'input:from_ctrl' ],
 					config = [],
 					status = [],
-					latency = 160, # 576, 704, 1856
+					#latency = 160, # 576, 704, 1856
+					latency = 1856,
 					word_t = 'uint32_t' )
 			 ] )

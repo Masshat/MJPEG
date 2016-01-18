@@ -149,7 +149,7 @@ FUNC(idct)
                 Idct(row, column) = r;
             }
         }
-	srl_busy_cycles ( EXEC_TIME );
+	//srl_busy_cycles ( EXEC_TIME );
         srl_mwmr_write( output, Idct, BLOCK_SIZE*sizeof(*Idct) );
     }
 }
