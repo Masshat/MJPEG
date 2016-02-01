@@ -1,0 +1,14 @@
+#!/usr/bin/env python
+# -*- python -*-
+from soclib import SyntheticTask
+
+TaskModel(
+	'ramdac',
+	ports = {'input':MwmrInput(160*8)},
+	impls = [ SwTask( 'ramdac',
+					 bootstrap = 'bootstrap',
+					 stack_size = 2048,
+					 sources = [ 'ramdac.c', 'ramdac_x11.c' ],
+					 defines = [ 'WIDTH', 'HEIGHT' ] ),
+                                         SyntheticTask( defines = {"WIDTH":'160', "HEIGHT":'120'} )
+			 ] )

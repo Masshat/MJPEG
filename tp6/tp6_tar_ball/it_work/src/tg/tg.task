@@ -1,0 +1,14 @@
+#!/usr/bin/env python
+# -*- python -*-
+from soclib import SyntheticTask
+
+TaskModel(
+	'tg',
+	ports = {'output':MwmrOutput(32)},
+	impls = [ SwTask( 'tg',
+					 bootstrap = 'bootstrap',
+					 stack_size = 4096,
+					 sources = [ 'tg.c' ],
+					 defines = [ 'FILE_NAME' ] ),
+                                         SyntheticTask( defines = {"FILE_NAME":'"video_160x120.mjpg"'} )
+				 ] )

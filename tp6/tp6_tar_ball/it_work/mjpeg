@@ -1,0 +1,208 @@
+#!/usr/bin/env python
+
+#import sys
+#
+#print 'Number of arguments:', len(sys.argv), 'arguments.'
+#print 'Argument List:', str(sys.argv)
+
+from dsx import *
+import sys
+
+# Declaration of all MWMR fifos
+#tg_demux    = Mwmr('tg_demux',    32,  2)
+#fixme size
+tg_split     = Mwmr('tg_split',         32,  2)
+split_demux0 = Mwmr('split_demux0',     32,  900) #912
+split_demux1 = Mwmr('split_demux1',     32,  900) #912
+demux_vld0   = Mwmr('demux_vld0',       32,  2)
+demux_vld1   = Mwmr('demux_vld1',       32,  2)
+vld_iqzz0    = Mwmr('vld_iqzz0',        128, 2)
+vld_iqzz1    = Mwmr('vld_iqzz1',        128, 2)
+iqzz_idct0   = Mwmr('iqzz_idct0',       256, 2)
+iqzz_idct1   = Mwmr('iqzz_idct1',       256, 2)
+idct_libu0   = Mwmr('idct_libu0',       64,  2)
+idct_libu1   = Mwmr('idct_libu1',       64,  2)
+libu_ramdac  = Mwmr('libu_ramdac',      1280, 2)
+huffman0     = Mwmr('huffman0',         32,  2)
+huffman1     = Mwmr('huffman1',         32,  2)
+quanti0      = Mwmr('quanti0',          64,  2)
+quanti1      = Mwmr('quanti1',          64,  2)
+
+tcg = Tcg(
+    Task( 'tg', "tg",
+          {'output':tg_split },
+          defines = {'FILE_NAME':'"video_160x120.mjpg"'}),
+
+   Task( 'split', "split",
+           {'input':tg_split,
+            'output0':split_demux0,
+            'output1':split_demux1},
+            defines = {'WIDTH':"160",
+                       'HEIGHT':"120"}),
+
+    #demux
+    Task( 'demux0', "demux",
+          { 'input':split_demux0,
+            'output':demux_vld0,
+            'huffman':huffman0,
+            'quanti':quanti0 },
+            defines = {'WIDTH':"160",
+                       'HEIGHT':"120"}),
+    Task( 'demux1', "demux",
+          { 'input':split_demux1,
+            'output':demux_vld1,
+            'huffman':huffman1,
+            'quanti':quanti1},
+            defines = {'WIDTH':"160",
+                       'HEIGHT':"120"}),
+    #vld
+    Task( 'vld0', "vld", 
+          { 'input':demux_vld0,
+            'output':vld_iqzz0,
+            'huffman':huffman0},
+          defines = {'WIDTH':"160",
+                  'HEIGHT':"120"}),
+    Task( 'vld1', "vld", 
+          { 'input':demux_vld1,
+            'output':vld_iqzz1,
+            'huffman':huffman1},
+          defines = {'WIDTH':"160",
+                  'HEIGHT':"120"}),
+
+    Task( 'iqzz0', "iqzz",
+            { 'input':vld_iqzz0,
+              'output':iqzz_idct0,
+              'quanti':quanti0},
+          defines = {'WIDTH':"160",
+                  'HEIGHT':"120"}),
+
+    Task( 'iqzz1', "iqzz",
+            { 'input':vld_iqzz1,
+              'output':iqzz_idct1,
+              'quanti':quanti1},
+          defines = {'WIDTH':"160",
+                  'HEIGHT':"120"}),
+
+    Task( 'idct0', "idct",
+            { 'input':iqzz_idct0,
+              'output':idct_libu0},
+          defines = {'WIDTH':"160",
+                  'HEIGHT':"120"}),
+    Task( 'idct1', "idct",
+            { 'input':iqzz_idct1,
+              'output':idct_libu1},
+          defines = {'WIDTH':"160",
+                  'HEIGHT':"120"}),
+            
+
+    Task( 'libu', "libu",
+            { 'input0':idct_libu0,
+              'input1':idct_libu1,
+              'output':libu_ramdac},
+          defines = {'WIDTH':"160",
+                  'HEIGHT':"120"}),
+
+    Task( 'ramdac', "ramdac",
+          { 'input': libu_ramdac },
+            defines = {'WIDTH':"160",
+                       'HEIGHT':"120"}),
+    )
+
+
+#from vgmn_noirq_multi import VgmnNoirqMulti
+from clustered_noirq_multi import ClusteredNoirqMulti
+
+cpu_count = [4, 4]
+ram_count = [1, 1]
+clust_count = 2
+#d_lines = sys.argv[1]
+#i_lines = sys.argv[2]
+#
+#if d_lines == "" :
+#        print "error args"
+#        sys.exit()
+#
+#if i_lines == "" :
+#        print "error args"
+#        sys.exit()
+
+#archi = VgmnNoirqMulti(proc_count = pc, ram_count = 2, dcache_lines = int(d_lines), icache_lines = int(i_lines))
+archi = ClusteredNoirqMulti(cpu_count, ram_count, min_latency = 10)
+
+mapper = Mapper (archi, tcg)
+
+tg_loc     = "cram0_0"
+split_loc  = "cram0_0"
+demux0_loc = "cram0_0"
+demux1_loc = "cram1_0"
+vld0_loc   = "cram0_0"
+vld1_loc   = "cram1_0"
+iqzz0_loc  = "cram0_0"
+iqzz1_loc  = "cram1_0"
+idct0_loc  = "cram0_0"
+idct1_loc  = "cram1_0"
+libu_loc   = "cram1_0"
+ramdac_loc = "cram1_0"
+
+#buffer producteur
+mapper.map ("tg_split",         buffer = "cram0_0"  , status = "cram0_0")
+mapper.map ("split_demux0",     buffer = "cram0_0"  , status = "cram0_0")
+mapper.map ("split_demux1",     buffer = "cram1_0"  , status = "cram1_0")
+mapper.map ("demux_vld0",       buffer = "cram0_0"  , status = "cram0_0")
+mapper.map ("demux_vld1",       buffer = "cram1_0"  , status = "cram1_0")
+mapper.map ("vld_iqzz0",        buffer = "cram0_0"  , status = "cram0_0") 
+mapper.map ("vld_iqzz1",        buffer = "cram1_0"  , status = "cram1_0") 
+mapper.map ("iqzz_idct0",       buffer = "cram0_0"  , status = "cram0_0") 
+mapper.map ("iqzz_idct1",       buffer = "cram1_0"  , status = "cram1_0") 
+mapper.map ("idct_libu0",       buffer = "cram0_0"  , status = "cram0_0")
+mapper.map ("idct_libu1",       buffer = "cram1_0"  , status = "cram1_0")
+mapper.map ("libu_ramdac",      buffer = "cram1_0"  , status = "cram0_0")
+mapper.map ("huffman0",         buffer = "cram0_0"  , status = "cram0_0")
+mapper.map ("huffman1",         buffer = "cram1_0"  , status = "cram1_0")
+mapper.map ("quanti0",          buffer = "cram0_0"  , status = "cram0_0")
+mapper.map ("quanti1",          buffer = "cram1_0"  , status = "cram1_0")
+# Mapping tasks
+
+mapper.map("tg", coprocessor = "tg0", controller = "tg0_ctrl")
+
+mapper.map("split",  run = "cpu0_0", stack = "cram0_0", desc = "cram0_0")
+mapper.map("demux0", run = "cpu0_0", stack = "cram0_0", desc = "cram0_0")
+mapper.map("vld0",   run = "cpu0_1", stack = "cram0_0", desc = "cram0_0")
+mapper.map("iqzz0",  run = "cpu0_2", stack = "cram0_0", desc = "cram0_0")
+mapper.map("idct0",  run = "cpu0_3", stack = "cram0_0", desc = "cram0_0")
+
+mapper.map("demux1", run = "cpu1_0", stack = "cram1_0", desc = "cram1_0")
+mapper.map("vld1",   run = "cpu1_1", stack = "cram1_0", desc = "cram1_0")
+mapper.map("iqzz1",  run = "cpu1_2", stack = "cram1_0", desc = "cram1_0")
+mapper.map("idct1",  run = "cpu1_3", stack = "cram1_0", desc = "cram1_0")
+mapper.map("libu",   run = "cpu1_0", stack = "cram1_0", desc = "cram1_0")
+
+mapper.map("ramdac", coprocessor = "ramdac0", controller = "ramdac0_ctrl")
+
+# software objects mapping
+
+for i in range(clust_count) :
+        for j in range(cpu_count[i]) :
+                mapper.map("cpu%d_%d"%(i, j), private = "cram%d_0"%i, shared = "uram%d_0"%i)
+
+mapper.map(tcg,
+                private = "cram1_0",
+                shared  = "uram1_0",
+                code    = "cram1_0",
+
+                # These lines are for getting output messages:
+                tty = "tty",
+                tty_no = 0)
+
+
+
+# Embedded software linked with the Mutek/H OS
+#mapper.generate( MutekH() )
+
+# Embedded software linked with the Mutek/S OS
+mapper.generate( MutekS() )
+
+# The software application for a POSX workstation can still be generated
+
+tcg.generate( Posix() )
+

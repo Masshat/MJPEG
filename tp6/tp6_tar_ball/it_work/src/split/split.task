@@ -1,0 +1,14 @@
+# -*- python -*-
+
+TaskModel(
+	'split',
+	ports = {'input':MwmrInput(32),
+			 'output0':MwmrOutput(32),
+			 'output1':MwmrOutput(32),
+			 },
+	impls = [ SwTask( 'split',
+					 stack_size = 4096,
+					 sources = [ 'split.c',
+								 '../common/block_io.c' ],
+					 defines = [ 'WIDTH', 'HEIGHT' ] )
+			 ] )
