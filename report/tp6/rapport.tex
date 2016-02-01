@@ -44,10 +44,37 @@
 \end{titlepage}
 %\linespread{0.3}  % a suprimé si problème de compil
 \section*{Question 1}
+Nous avons opté pour une architcture clusterisé avec 4 processeurs par pipeline, 1 ram et un cache de 64 lignes de 8 mots par ligne.\\
+Nous avons augmenter la tailles des canaux MWMR a la taille d'une demi image.
 \section*{Question 2}
+Cache : 32Ko *0,05*0,008= 1,608\\
+RAM : 128 Ko *0,05 = 6,4\\
+Mips 0,16 *8 = 1,28\\
+MWMR =0,012*16=0,208\\
+vgmn = 0,04\\
+tg = 0,3\\
+ramdac = 0,361\\
+crossbar = 0,1\\
+\\
+	Total =10,297
 \section*{Question 3}
+La simulation a étant tres lente nous avons calculé que 8 images.\\
+	notre fréquence est (85000000 *25 ) / 8 = 266 MHZ.\\
+	consomation = 266 * 10,297 = 2739.
+	
 \section*{Question 4}
-\section*{Question 5}
+Ayant étant déçu par l'archi clustursé nous avons opté pour archi classqie avec 4 processeurs, mais cette fois ci avec un comprocesseurs idct, et des caches de 32 lignes.
+Cache = ((32 * 8 * 4 * 2) * 4) = 8Ko * 0.05 + 0.004 = 0.44 \\
+RAM = 43Ko * 0.05 = 2.15\\
+Mips = 0.16 * 4 = 0.64\\
+Mwmr = 0.012 * 16 = 0.208\\
+tg = 0.3\\
+ramdac = (((160*120*1.5) / 4) / 1024) * 0.05 + 0.01 = 0.361\\
+\\
+Total = 4.1mm2
+
+notre fréquence est (tjours pour 8 images) = (70500000*25)/8 = 157 MHZ.
 \section*{Question 6}
+Notre meilleur Soc est sans doute le deuxieme, nous avons déduit que plus la vidéo étaits grande , il y'avait obligation d'utiliser des coprocesseurs matériel pour idct.
 
 \end{document}

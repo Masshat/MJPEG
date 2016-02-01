@@ -135,4 +135,3 @@ mapper.generate( MutekS() )
 
 # The software application for a POSX workstation can still be generated
 tcg.generate( Posix() )
-
