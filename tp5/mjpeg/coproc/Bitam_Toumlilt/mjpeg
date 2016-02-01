@@ -1,0 +1,188 @@
+#!/usr/bin/env python
+
+from dsx import *
+from vgmn_noirq_multi import VgmnNoirqMulti
+import sys
+# Declaration of all MWMR fifos
+tg_demux    = Mwmr('tg_demux'   , 32  , 2)
+demux_vld   = Mwmr('demux_vld'  , 32  , 2)
+vld_iqzz    = Mwmr('vld_iqzz'   , 128 , 2)
+iqzz_idct   = Mwmr('iqzz_idct'  , 256 , 2)
+idct_libu   = Mwmr('idct_libu'  , 64  , 2)
+libu_ramdac = Mwmr('libu_ramdac', 48*8, 2)
+huffman     = Mwmr('huffman'    , 32  , 2)
+quanti      = Mwmr('quanti'     , 64  , 2)
+
+tcg = Tcg(
+
+    Task( 'tg', "tg",
+          {'output':tg_demux },
+          defines = {'FILE_NAME':'"plan.mjpg"'}),
+
+    Task( 'demux', "demux",
+          { 'input':tg_demux,
+            'output':demux_vld,
+            'huffman':huffman,
+            'quanti':quanti },
+            defines = {'WIDTH':"48",
+                       'HEIGHT':"48"}),
+
+    Task( 'vld', "vld",
+	  {'input':demux_vld,
+	   'output':vld_iqzz,
+	   'huffman':huffman },
+            defines = {'WIDTH':"48",
+                       'HEIGHT':"48"}),
+    
+    Task( 'iqzz', "iqzz",
+	  {'input':vld_iqzz,
+	   'output':iqzz_idct,
+	   'quanti':quanti },
+            defines = {'WIDTH':"48",
+                       'HEIGHT':"48"}),
+
+    Task( 'idct', "idct",
+	  {'input':iqzz_idct,
+	   'output':idct_libu},
+            defines = {'EXEC_TIME':"1024",
+		       'WIDTH':"48",
+                       'HEIGHT':"48"}),
+
+    Task( 'libu', "libu",
+	  {'input':idct_libu,
+	   'output':libu_ramdac},
+            defines = {'WIDTH':"48",
+                       'HEIGHT':"48"}),
+
+    Task( 'ramdac', "ramdac",
+          { 'input': libu_ramdac },
+            defines = {'WIDTH':"48",
+                       'HEIGHT':"48"}),
+    )
+
+#p = Posix()
+#tcg.generate(p)
+#########################################################
+# Section B : Hardware architecture
+#
+# The file containing the architecture definition
+# must be included, and the path to the directory
+# containing this file must be defined
+#########################################################
+
+proc_nb = 2
+#dcache_l = int(sys.argv[1])
+#icache_l = int(sys.argv[2])
+archi = VgmnNoirqMulti( proc_count = proc_nb, ram_count = 2)
+
+#########################################################
+# Section C : Mapping
+#
+#########################################################
+
+mapper = Mapper(archi, tcg)
+
+# mapping the MWMR channel
+
+mapper.map( "tg_demux",
+  buffer = "cram1",
+  status = "cram1"
+)
+mapper.map( "demux_vld",
+  buffer = "cram1",
+  status = "cram1"
+)
+mapper.map( "vld_iqzz",
+  buffer = "cram1",
+  status = "cram1"
+)
+mapper.map( "iqzz_idct",
+  buffer = "cram1",
+  status = "cram1"
+)
+mapper.map( "idct_libu",
+  buffer = "cram1",
+  status = "cram1"
+)
+mapper.map( "libu_ramdac",
+  buffer = "cram1",
+  status = "cram1"
+)
+mapper.map( "huffman",
+  buffer = "cram1",
+  status = "cram1"
+)
+mapper.map( "quanti",
+  buffer = "cram1",
+  status = "cram1"
+)
+
+# mapping the "prod0" and "cons0" tasks
+
+mapper.map("demux",
+   run   = "cpu0",
+   stack = "cram0",
+   desc  = "cram0"
+)
+mapper.map("vld",
+   run   = "cpu1",
+   stack = "cram0",
+   desc  = "cram0"
+)
+mapper.map("iqzz",
+   run   = "cpu0",
+   stack = "cram0",
+   desc  = "cram0"
+)
+#mapper.map("idct",
+#   run   = "cpu0",
+#   stack = "cram0",
+#   desc  = "cram0"
+#)
+mapper.map("libu",
+   run   = "cpu1",
+   stack = "cram0",
+   desc  = "cram0"
+)
+# mapping the software objects associated to a processor
+for i in range(proc_nb):
+	  mapper.map( 'cpu%d'%i,
+	   		 private = "cram0",
+	   		 shared  = "uram0")
+
+mapper.map('tg',
+	  coprocessor = 'tg0',
+	  controller = 'tg0_ctrl'
+	  )
+mapper.map('ramdac',
+	  coprocessor = 'ramdac0',
+	  controller = 'ramdac0_ctrl'
+	  )
+mapper.map('idct',
+	  coprocessor = 'idct0',
+	  controller = 'idct0_ctrl'
+	  )
+# mapping the software objects used by the embedded OS
+
+mapper.map(tcg,
+  private = "cram1",
+  shared  = "uram1",
+  code    = "cram1",
+
+  # These lines are for getting output messages:
+  tty = "tty0",
+  tty_no = 0)
+
+######################################################
+# Section D : Code generation
+######################################################
+
+# Embedded software linked with the Mutek/S OS
+
+mapper.generate( MutekS() )
+#mapper.generate( MutekH() )
+
+# The software application for a POSX workstation can still be generated
+
+#tcg.generate( Posix() )
+

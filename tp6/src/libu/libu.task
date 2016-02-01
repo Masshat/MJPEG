@@ -1,0 +1,12 @@
+# -*- python -*-
+
+TaskModel(
+	'libu',
+	ports = {'input':MwmrInput(64),
+		 'output':MwmrOutput(8*160),
+			 },
+	impls = [ SwTask( 'libu',
+					 stack_size = 8192,
+					 sources = [ 'libu.c' ],
+					 defines = [ 'WIDTH', 'HEIGHT' ] )
+			 ] )
