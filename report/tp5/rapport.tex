@@ -44,12 +44,46 @@
 \end{titlepage}
 %\linespread{0.3}  % a suprimé si problème de compil
 \section*{Question 1}
-Pour décompresser 25 images avec la configuration donnée, il faut 28,6 millions de cycles.
+Il faudrait environ 28 millions de cycles pour la décompression.
 \section*{Question 2}
+Un coefficient est sur 4 octets, étant donné que la taille d'un pixel est de 1 octets, on peut donc transférer 4 pixels par cycle.\\
+Le composant VciCrossbar est de 10. Pour une transaction ( aller + retour ), on a donc une latence de 20 cycles :\\
+Prise de verrou (ll+sc) : 2x20cycles\\
+Lecture de status: 20 cycles\\
+Lecture/écriture de données: (64/8) x 20\\
+Mise à jour du status: 20 cycles\\
+Relachement du verrou: 20 cycles\\
 \section*{Question 3}
-Il est inutile de synthétiser un coprocesseur, car le cout a payé est assez grand comparé au gains, et il ne faut pas oublié le cout de la communication, en effet il se peut que le coprocesseur passe plus de temps en communication qu'a faire le calcul.
+Le gain apporté est beaucoup plus faible comparé au coût matériel.
 \section*{Question 4}
+Résultat des tests:
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+Temps d'exec & Cycles (en millions)\\ \hline
+100 & 26,7\\ \hline
+500 & 26,6\\ \hline
+1000 & 26,5\\ \hline
+4000 & 26,4\\ \hline
+8000 & 26,5\\ \hline
+16000 & 27,1\\ \hline
+\end{tabular}\newline
+\end{center}
 \section*{Question 5}
+Tests avec le coprocesseur :
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+Temps d'exec & Cycles (en millions)\\ \hline
+160 & 26,5\\ \hline
+576 & 26,4\\ \hline
+704 & 26,5\\ \hline
+1856 & 26,4\\ \hline
+\end{tabular}\newline
+\end{center}
+En vue des résultats, il serait préférable d'utiliser le coprocesseur. Car même si les résultats en terme de performance sont similaires, le coût matériel est plus faible.
+
 \section*{Question 6}
+On pourrait, avec coût nul, tester une implémentation plus rapidement. Le coprocesseur virtuelle permet d'atteindre son objectif lorsqu'on veut se lancer dans la composition architecturale.
 
 \end{document}
